@@ -71,11 +71,15 @@ var ajon = {
   //Recurse into objects and arrays...
   _serialise : function(ob, ex) {
     //The reason for this serialiser is to treat arrays just like other objects here.
-    var ret = "";
+    var rets=[];
     for (var i in ob) 
       if (ob.hasOwnProperty(i)) 
         if (!ex || ex.indexOf(i)===-1)
-          ret += '<' + ajon._quote('>', i.toString()) + '>=' + ajon.stringify(ob[i], ex) + ';'; 
+          rets.push( '<' + ajon._quote('>', i.toString()) + '>=' + ajon.stringify(ob[i], ex) + ';' ); 
+    rets.sort();
+    var ret = "";
+    for (var r in rets) if (rets.hasOwnProperty(r))
+      ret += rets[r];
     return ret;
   },
 
@@ -250,7 +254,7 @@ module.exports = ajon;
 //The real tests of ajon are those of the rhaboo library,
 //  that being what I wrote it for.
 
-/* 
+/*
  
 var tortured = [0,1,2,3,4]
 tortured[1] = undefined;
