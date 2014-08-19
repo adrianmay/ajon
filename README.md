@@ -7,4 +7,6 @@ It may be a problem for some projects (including rhaboo) that JSON mangles array
 
 This module provides stringify(object) and parse(string) analogous to JSON such that arrays are preserved properly.
 
+There's no attempt to deal with prototypes or function-valued properties. Regexes are not dealt with yet but could be.
+
 The serialised notation is not pretty enough to read for pleasure, and there are no customisation options. It's only intended for computers to read.
