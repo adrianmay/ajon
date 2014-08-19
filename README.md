@@ -10,3 +10,6 @@ This module provides stringify(object) and parse(string) analogous to JSON such 
 There's no attempt to deal with prototypes or function-valued properties. Regexes are not dealt with yet but could be.
 
 The serialised notation is not pretty enough to read for pleasure, and there are no customisation options. It's only intended for computers to read.
+
+Install with `npm install ajon` and include with `<script src='node_modules/ajon/src/ajon.js'></script>`
+
