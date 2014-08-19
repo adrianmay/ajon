@@ -1,5 +1,35 @@
 "use strict"
 
+if (!Array.prototype.indexOf) {
+  Array.prototype.indexOf = function (searchElement, fromIndex) {
+    var k;
+    if (this == null) {
+      throw new TypeError('"this" is null or not defined');
+    }
+    var O = Object(this);
+    var len = O.length >>> 0;
+    if (len === 0) {
+      return -1;
+    }
+    var n = +fromIndex || 0;
+    if (Math.abs(n) === Infinity) {
+      n = 0;
+    }
+    if (n >= len) {
+      return -1;
+    }
+    k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+    while (k < len) {
+      var kValue;
+      if (k in O && O[k] === searchElement) {
+        return k;
+      }
+      k++;
+    }
+    return -1;
+  };
+}
+
 var ajon = {
   //Detailed type examination function...
   _classof : function(ob) {
@@ -18,17 +48,17 @@ var ajon = {
   },
   //Per-type serialisation...
   _stringifiers : {
-    'null'      : function (ob) { return "~"; },
-    'undefined' : function (ob) { return "_"; },
-    'number'    : function (ob) { return "("+ob.toString()+")"; },
-    'boolean'   : function (ob) { return ob?"@":"!"; },
-    'string'    : function (ob) { return '<'+ajon._quote('>', ob)+'>'; },
-    'object'    : function (ob) { return "{"+ajon._serialise(ob)+"}"; },
-    'array'     : function (ob) { return "["+ajon._serialise(ob)+"]"; },
-    'bad'       : function (ob) { return ""; },
+    'null'      : function (ob,ex) { return "~"; },
+    'undefined' : function (ob,ex) { return "_"; },
+    'number'    : function (ob,ex) { return "("+ob.toString()+")"; },
+    'boolean'   : function (ob,ex) { return ob?"@":"!"; },
+    'string'    : function (ob,ex) { return '<'+ajon._quote('>', ob)+'>'; },
+    'object'    : function (ob,ex) { return "{"+ajon._serialise(ob,ex)+"}" },
+    'array'     : function (ob,ex) { return "["+ajon._serialise(ob,ex)+"]"; },
+    'bad'       : function (ob,ex) { return ""; },
   },
-  stringify : function (ob) {
-    return ajon._stringifiers[ajon._classof(ob)](ob);
+  stringify : function (ob, ex) { //ex is array of property names to be excluded
+    return ajon._stringifiers[ajon._classof(ob)](ob, ex);
   },
   //Escape terminal character and backslash...
   _quote : function(char, str) {
@@ -39,12 +69,13 @@ var ajon = {
     return str.replace(new RegExp('\\\\(.)', 'g'),'$1');
   },
   //Recurse into objects and arrays...
-  _serialise : function(ob) {
+  _serialise : function(ob, ex) {
     //The reason for this serialiser is to treat arrays just like other objects here.
     var ret = "";
     for (var i in ob) 
       if (ob.hasOwnProperty(i)) 
-        ret += '<' + ajon._quote('>', i.toString()) + '>=' + ajon.stringify(ob[i]) + ';'; 
+        if (!ex || ex.indexOf(i)===-1)
+          ret += '<' + ajon._quote('>', i.toString()) + '>=' + ajon.stringify(ob[i], ex) + ';'; 
     return ret;
   },
 
@@ -216,6 +247,7 @@ module.exports = ajon;
 //  that being what I wrote it for.
 
 /*
+ 
 var tortured = [0,1,2,3,4]
 tortured[1] = undefined;
 tortured[2] = null;
@@ -247,12 +279,23 @@ function show(col) {
   console.log("========================");
 }
 
-var slized = tests.map(ajon.stringify, ajon);
-var reborn = slized.map(ajon.parse, ajon);
-var reslized = reborn.map(ajon.stringify, ajon);
-show(slized);
-show(reborn);
-show(reslized);
-*/
+var lins = [], reborns = [];
 
+for (var t in tests) if (tests.hasOwnProperty(t)) {
+  var test = tests[t];
+  var lin = ajon.stringify(test);
+  var reborn = ajon.parse(lin);
+  lins.push(lin);
+  reborns.push(reborn);
+}
+show(tests);
+show(lins);
+show(reborns);
+
+console.log(ajon.stringify( {
+  _rhaboo : "dont look at me",
+  foo: "bar"
+}, ["_rhaboo"]));
+
+*/
 
