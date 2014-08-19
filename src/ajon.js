@@ -249,6 +249,7 @@ module.exports = ajon;
 //The real tests of ajon are those of the rhaboo library,
 //  that being what I wrote it for.
 
+/* 
  
 var tortured = [0,1,2,3,4]
 tortured[1] = undefined;
@@ -299,4 +300,4 @@ console.log(ajon.stringify( {
   foo: "bar"
 }, ["_rhaboo"]));
 
-
+*/
