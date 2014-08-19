@@ -11,5 +11,7 @@ There's no attempt to deal with prototypes or function-valued properties. Regexe
 
 The serialised notation is not pretty enough to read for pleasure, and there are no customisation options. It's only intended for computers to read.
 
+It's not known how ajon.parse reacts to strings that were not generated with ajon.stringify, therefore it's not known to be secure enough to use over a network. Feel free to fork it into a version that claims to be secure.
+
 Install with `npm install ajon` and include with `<script src='node_modules/ajon/src/ajon.js'></script>`
 
