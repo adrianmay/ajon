@@ -198,8 +198,9 @@ var ajon = {
       if (!this.getThisToken(opening?'[':']'))
         return false;
       if (opening) {
-        box.val = [];
-        this.getNumber({});
+        var lenbox = {};
+        this.getNumber(lenbox);
+        box.val = new Array(lenbox.val); //OMG it actually came in useful!
         this.getThisToken(':');
       }
       return true;
