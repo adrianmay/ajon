@@ -54,7 +54,7 @@ var ajon = {
     'boolean'   : function (ob,ex) { return ob?"@":"!"; },
     'string'    : function (ob,ex) { return '<'+ajon._quote('>', ob)+'>'; },
     'object'    : function (ob,ex) { return "{"+ajon._serialise(ob,ex)+"}" },
-    'array'     : function (ob,ex) { return "["+ajon._serialise(ob,ex)+"]"; },
+    'array'     : function (ob,ex) { return "[("+ob.length+"):"+ajon._serialise(ob,ex)+"]"; },
     'bad'       : function (ob,ex) { return ""; },
   },
   stringify : function (ob, ex) { //ex is array of property names to be excluded
@@ -99,7 +99,7 @@ var ajon = {
   
   //For each string to be parsed, we'll make an object with this as its prototype...
   machineProto : {
-    tokens : '~_!@<>/=()[]{};\\',
+    tokens : '~_!@<>/=()[]{};:\\',
     //Naive chomp...
     chomp_no_escape : function() {
       this.yyval = this.input.substr(this.cur,1);
@@ -197,8 +197,11 @@ var ajon = {
     getArrayDelimiter : function(opening, box) {
       if (!this.getThisToken(opening?'[':']'))
         return false;
-      if (opening)
+      if (opening) {
         box.val = [];
+        this.getNumber({});
+        this.getThisToken(':');
+      }
       return true;
     },
     getBranchDelimiter : function(opening, box) { 
@@ -246,7 +249,6 @@ module.exports = ajon;
 //The real tests of ajon are those of the rhaboo library,
 //  that being what I wrote it for.
 
-/*
  
 var tortured = [0,1,2,3,4]
 tortured[1] = undefined;
@@ -297,5 +299,4 @@ console.log(ajon.stringify( {
   foo: "bar"
 }, ["_rhaboo"]));
 
-*/
 
