@@ -1,6 +1,6 @@
 {
   "name": "ajon",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "More Accurate Than JSON",
   "main": "src/ajon.js",
   "repository": {
@@ -26,4 +26,3 @@
   },
   "dependencies": {}
 }
-
