@@ -2,6 +2,7 @@
   "name": "ajon",
   "version": "1.0.0",
   "description": "More Accurate Than JSON",
+  "main": "src/ajon.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/adrianmay/ajon.git"
