@@ -249,7 +249,8 @@ var ajon = {
   }
 }
 
-module.exports = ajon;
+if (module) 
+  module.exports = ajon;
  
 //The real tests of ajon are those of the rhaboo library,
 //  that being what I wrote it for.
